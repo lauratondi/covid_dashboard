@@ -72,56 +72,7 @@
         </div>
 
         <div class="col-12 col-lg-6 scrollable">
-          <div id="progressWrapper" class="row p-3">
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-            <div class="col-12 mb-5">
-              <p class="mb-0">Descrizione</p>
-              <div class="progress rounded-0">
-                <div class="progress-bar bg-main" style="width: 54%"></div>
-              </div>
-            </div>
-          </div>
+          <div id="progressWrapper" class="row p-3"></div>
         </div>
       </div>
     </div>
@@ -183,19 +134,36 @@
 
           // CARD REGIONI
           let cardWrapper = document.querySelector('#cardWrapper');
+          let progressWrapper = document.querySelector('#progressWrapper');
+
+          let todayMax = Math.max(...sorted.map((el) => el.nuovi_positivi));
+          console.log(todayMax);
 
           sorted.forEach((el) => {
             let div = document.createElement('div');
             div.classList.add('col-12', 'col-md-6', 'my-4');
-            div.innerHTML = `
-
-            <div class="card-custom p-3 pb-0 h-100">
-                <p>${el.denominazione_regione}</p>
-                <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
-              </div>
-              `;
+            div.innerHTML = `<div class="card-custom p-3 pb-0 h-100">
+                  <p>${el.denominazione_regione}</p>
+                  <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
+             </div>
+            `;
 
             cardWrapper.appendChild(div);
+
+            let bar = document.createElement('div');
+            bar.classList.add('col-12', 'mb-5');
+            bar.innerHTML = `
+            <p class="mb-0">${el.denominazione_regione}: ${
+              el.nuovi_positivi
+            }</p>
+            <div class="progress rounded-0">
+              <div class="progress-bar bg-main" style="width: ${
+                (100 * el.nuovi_positivi) / todayMax
+              }%"></div>
+            </div>
+            `;
+
+            progressWrapper.appendChild(bar);
           });
         });
     </script>
