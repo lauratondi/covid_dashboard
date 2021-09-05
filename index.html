@@ -22,6 +22,16 @@
     <title>Hello, world!</title>
   </head>
   <body>
+    <!-- MODAL -->
+    <div class="modal-custom">
+      <div class="modal-custom-content">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
+        quisquam deleniti, minus ex officia aliquid dignissimos magnam itaque
+        eos porro incidunt deserunt, sapiente blanditiis. Doloremque cum numquam
+        quaerat consectetur assumenda.
+      </div>
+    </div>
+
     <div class="container py-5">
       <div class="row">
         <div class="col-12">
@@ -30,7 +40,8 @@
       </div>
     </div>
 
-    <div class="container py-3">
+    <!-- TOTAL CARDS -->
+    <div class="container position-relative py-3">
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
@@ -65,7 +76,8 @@
       </div>
     </div>
 
-    <div class="container">
+    <!-- REGION CARDS & PROGRESS-BAR -->
+    <div class="container position-relative">
       <div class="row">
         <div class="col-12 col-lg-6 scrollable">
           <div id="cardWrapper" class="row p-3"></div>
@@ -132,17 +144,17 @@
 
           document.querySelector('#totalPositive').innerHTML = totalPositive;
 
-          // CARD REGIONI
+          // CARD REGIONI & PROGRESS-BAR
           let cardWrapper = document.querySelector('#cardWrapper');
+
           let progressWrapper = document.querySelector('#progressWrapper');
 
           let todayMax = Math.max(...sorted.map((el) => el.nuovi_positivi));
-          console.log(todayMax);
 
           sorted.forEach((el) => {
             let div = document.createElement('div');
             div.classList.add('col-12', 'col-md-6', 'my-4');
-            div.innerHTML = `<div class="card-custom p-3 pb-0 h-100">
+            div.innerHTML = `<div class="card-custom p-3 pb-0 h-100" data-region="${el.denominazione_regione}">
                   <p>${el.denominazione_regione}</p>
                   <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
              </div>
@@ -164,6 +176,24 @@
             `;
 
             progressWrapper.appendChild(bar);
+          });
+
+          // MODALS
+          let modal = document.querySelector('.modal-custom');
+          let modalContent = document.querySelector('.modal-custom-content');
+
+          document.querySelectorAll('[data-region]').forEach((el) => {
+            el.addEventListener('click', () => {
+              let region = el.dataset.region;
+              modal.classList.add('active');
+            });
+          });
+
+          // REMOVE MODALS
+          window.addEventListener('click', function (e) {
+            if (e.target === modal) {
+              modal.classList.remove('active');
+            }
           });
         });
     </script>
