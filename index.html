@@ -68,56 +68,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-lg-6 scrollable">
-          <div id="card-wrapper" class="row p-3">
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-5 my-4">
-              <div class="card-custom p-3 pb-0 h-100">
-                <p>Nome Regione</p>
-                <p class="text-end h5 mb-0 text-main">23</p>
-              </div>
-            </div>
-          </div>
+          <div id="cardWrapper" class="row p-3"></div>
         </div>
 
         <div class="col-12 col-lg-6 scrollable">
@@ -183,12 +134,11 @@
       )
         .then((response) => response.json())
         .then((dati) => {
-          // Ordine dati dall'ultimo aggiornato
+          // Ordine dati dall'ultimo aggiornato (casualmente sono in ordine decrescente per nuovi positivi)
           let sorted = dati.reverse();
 
           // Ultima data caricata
           let lastUpdated = sorted[0].data;
-
           // Formattazione per mostrare data di ultimo update
           let lastUpdatedFormatted = lastUpdated
             .split('T')[0]
@@ -230,7 +180,23 @@
             .reduce((t, n) => t + n);
 
           document.querySelector('#totalPositive').innerHTML = totalPositive;
-          console.log(totalPositive);
+
+          // CARD REGIONI
+          let cardWrapper = document.querySelector('#cardWrapper');
+
+          sorted.forEach((el) => {
+            let div = document.createElement('div');
+            div.classList.add('col-12', 'col-md-6', 'my-4');
+            div.innerHTML = `
+
+            <div class="card-custom p-3 pb-0 h-100">
+                <p>${el.denominazione_regione}</p>
+                <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
+              </div>
+              `;
+
+            cardWrapper.appendChild(div);
+          });
         });
     </script>
   </body>
