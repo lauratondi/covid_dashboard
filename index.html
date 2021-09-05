@@ -34,26 +34,32 @@
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
-            <p class="h4 mb-5">Lorem</p>
-            <p class="h2 mb-0 text-end text-main mt-auto">123</p>
+            <p class="h4 mb-5">Casi Totali</p>
+            <p id="totalCases" class="h2 mb-0 text-end text-main mt-auto"></p>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
-            <p class="h4 mb-5">Lorem</p>
-            <p class="h2 mb-0 text-end text-main mt-auto">123</p>
+            <p class="h4 mb-5">Dimessi guariti</p>
+            <p id="totalRecovered" class="h2 mb-0 text-end text-main mt-auto">
+              123
+            </p>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
-            <p class="h4 mb-5">Lorem</p>
-            <p class="h2 mb-0 text-end text-main mt-auto">123</p>
+            <p class="h4 mb-5">Morti totali</p>
+            <p id="totalDeath" class="h2 mb-0 text-end text-main mt-auto">
+              123
+            </p>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
-            <p class="h4 mb-5">Lorem</p>
-            <p class="h2 mb-0 text-end text-main mt-auto">123</p>
+            <p class="h4 mb-5">Attuali</p>
+            <p id="totalPositive" class="h2 mb-0 text-end text-main mt-auto">
+              123
+            </p>
           </div>
         </div>
       </div>
@@ -168,6 +174,7 @@
         </div>
       </div>
     </div>
+
     <script src="script.js"></script>
 
     <script>
@@ -176,10 +183,13 @@
       )
         .then((response) => response.json())
         .then((dati) => {
+          // Ordine dati dall'ultimo aggiornato
           let sorted = dati.reverse();
 
+          // Ultima data caricata
           let lastUpdated = sorted[0].data;
 
+          // Formattazione per mostrare data di ultimo update
           let lastUpdatedFormatted = lastUpdated
             .split('T')[0]
             .split('-')
@@ -188,7 +198,39 @@
 
           document.querySelector('#data').innerHTML = lastUpdatedFormatted;
 
-          console.log(lastUpdatedFormatted);
+          // Ordinare postivi in ordine decr
+          let sortedPositive = sorted.sort(
+            (a, b) => b.nuovi_positivi - a.nuovi_positivi
+          );
+
+          // Casi totali
+          let totalCases = sorted
+            .map((el) => el.totale_casi)
+            .reduce((t, n) => t + n);
+
+          document.querySelector('#totalCases').innerHTML = totalCases;
+
+          // Guariti totali
+          let totalRecovered = sorted
+            .map((el) => el.dimessi_guariti)
+            .reduce((t, n) => t + n);
+
+          document.querySelector('#totalRecovered').innerHTML = totalRecovered;
+
+          // Morti totali
+          let totalDeath = sorted
+            .map((el) => el.deceduti)
+            .reduce((t, n) => t + n);
+
+          document.querySelector('#totalDeath').innerHTML = totalDeath;
+
+          // Totale Positivi attuali
+          let totalPositive = sorted
+            .map((el) => el.totale_positivi)
+            .reduce((t, n) => t + n);
+
+          document.querySelector('#totalPositive').innerHTML = totalPositive;
+          console.log(totalPositive);
         });
     </script>
   </body>
