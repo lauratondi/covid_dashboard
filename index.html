@@ -22,7 +22,15 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <div class="container my-5 py-5">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-12">
+          <p class="h2">Dati aggiornati al: <span id="data"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container py-3">
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
@@ -161,5 +169,27 @@
       </div>
     </div>
     <script src="script.js"></script>
+
+    <script>
+      fetch(
+        'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json'
+      )
+        .then((response) => response.json())
+        .then((dati) => {
+          let sorted = dati.reverse();
+
+          let lastUpdated = sorted[0].data;
+
+          let lastUpdatedFormatted = lastUpdated
+            .split('T')[0]
+            .split('-')
+            .reverse()
+            .join('/');
+
+          document.querySelector('#data').innerHTML = lastUpdatedFormatted;
+
+          console.log(lastUpdatedFormatted);
+        });
+    </script>
   </body>
 </html>
