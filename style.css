@@ -58,6 +58,7 @@ body {
   margin: auto;
   width: 70%;
   padding: 30px;
+  border-radius: 10px;
 }
 
 .modal-custom.active {

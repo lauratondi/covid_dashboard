@@ -185,7 +185,27 @@
           document.querySelectorAll('[data-region]').forEach((el) => {
             el.addEventListener('click', () => {
               let region = el.dataset.region;
+
               modal.classList.add('active');
+
+              let dataAboutRegion = sorted.filter(
+                (el) => el.denominazione_regione == region
+              )[0]; /* Aggiungo [0] perché sono in un array di oggetti e mi serve il primo*/
+
+              modalContent.innerHTML = `
+                
+               <div class="container">
+                <div class="row">
+                  <div class="col-12">
+                    <p class="h2 text-main">${dataAboutRegion.denominazione_regione}</p>
+                    <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
+                    <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
+                    <p class="lead">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
+                    <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
+                  </div>
+                </div>
+              </div>
+              `;
             });
           });
 
