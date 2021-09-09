@@ -19,6 +19,7 @@ body {
   background-color: var(--light-color);
 }
 
+/* CARDS */
 .card-custom {
   box-shadow: -5px -5px 20px #fff, 5px 5px 20px #babecc;
   border-radius: 10px;
@@ -39,11 +40,13 @@ body {
   overflow-y: scroll;
 }
 
+/* MODALS */
 .modal-custom {
   display: block;
-  position: fixed;
+  position: absolute;
   left: 0px;
   top: 0px;
+  /* bottom: 0px; */
   z-index: 0;
   opacity: 0;
   width: 100%;
@@ -64,4 +67,66 @@ body {
 .modal-custom.active {
   z-index: 10;
   opacity: 1;
+}
+
+/* ISTOGRAMS */
+.pin-new {
+  border-right: 2px solid rgba(0, 0, 255, 0.2);
+  position: relative;
+  width: 5px;
+  margin-right: 1px;
+}
+
+.pin-new::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: -3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: blue;
+}
+
+.pin-death {
+  border-right: 2px solid rgba(255, 0, 0, 0.2);
+  position: relative;
+  width: 5px;
+  margin-right: 1px;
+}
+
+.pin-death::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: -3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.pin-recovered {
+  border-right: 2px solid rgba(0, 255, 0, 0.2);
+  position: relative;
+  width: 5px;
+  margin-right: 1px;
+}
+
+.pin-recovered::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: -3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: green;
+}
+
+.plot {
+  height: 200px;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
 }

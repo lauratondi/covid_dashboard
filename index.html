@@ -52,25 +52,25 @@
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
             <p class="h4 mb-5">Dimessi guariti</p>
-            <p id="totalRecovered" class="h2 mb-0 text-end text-main mt-auto">
-              123
-            </p>
+            <p
+              id="totalRecovered"
+              class="h2 mb-0 text-end text-main mt-auto"
+            ></p>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
             <p class="h4 mb-5">Morti totali</p>
-            <p id="totalDeath" class="h2 mb-0 text-end text-main mt-auto">
-              123
-            </p>
+            <p id="totalDeath" class="h2 mb-0 text-end text-main mt-auto"></p>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="card-custom d-flex flex-column h-100">
             <p class="h4 mb-5">Attuali</p>
-            <p id="totalPositive" class="h2 mb-0 text-end text-main mt-auto">
-              123
-            </p>
+            <p
+              id="totalPositive"
+              class="h2 mb-0 text-end text-main mt-auto"
+            ></p>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@
     </div>
 
     <!-- ISTOGRAMMA -->
-    <div class="container my-5 py-5">
+    <!-- <div class="container my-5 py-5">
       <div class="row">
         <div class="col-12">
           <div
@@ -100,161 +100,8 @@
           ></div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <script src="script.js"></script>
-
-    <script>
-      fetch(
-        // 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json'
-        'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json'
-      )
-        .then((response) => response.json())
-        .then((dati) => {
-          // Ordine dati dall'ultimo aggiornato
-          let sorted = dati.reverse();
-
-          // Ultima data caricata
-          let lastUpdated = sorted[0].data;
-
-          // Formattazione per mostrare data di ultimo update
-          let lastUpdatedFormatted = lastUpdated
-            .split('T')[0]
-            .split('-')
-            .reverse()
-            .join('/');
-
-          document.querySelector('#data').innerHTML = lastUpdatedFormatted;
-
-          // Ordinare postivi in ordine decr
-          let lastUpdatedData = sorted
-            .filter((el) => el.data == lastUpdated)
-            .sort((a, b) => b.nuovi_positivi - a.nuovi_positivi);
-
-          // Casi totali
-          let totalCases = lastUpdatedData
-            .map((el) => el.totale_casi)
-            .reduce((t, n) => t + n);
-
-          document.querySelector('#totalCases').innerHTML = totalCases;
-
-          // Guariti totali
-          let totalRecovered = lastUpdatedData
-            .map((el) => el.dimessi_guariti)
-            .reduce((t, n) => t + n);
-
-          document.querySelector('#totalRecovered').innerHTML = totalRecovered;
-
-          // Morti totali
-          let totalDeath = lastUpdatedData
-            .map((el) => el.deceduti)
-            .reduce((t, n) => t + n);
-
-          document.querySelector('#totalDeath').innerHTML = totalDeath;
-
-          // Totale Positivi attuali
-          let totalPositive = lastUpdatedData
-            .map((el) => el.totale_positivi)
-            .reduce((t, n) => t + n);
-
-          document.querySelector('#totalPositive').innerHTML = totalPositive;
-
-          // CARD REGIONI & PROGRESS-BAR
-          let cardWrapper = document.querySelector('#cardWrapper');
-
-          let progressWrapper = document.querySelector('#progressWrapper');
-
-          let todayMax = Math.max(
-            ...lastUpdatedData.map((el) => el.nuovi_positivi)
-          );
-
-          lastUpdatedData.forEach((el) => {
-            let div = document.createElement('div');
-            div.classList.add('col-12', 'col-md-6', 'my-4');
-            div.innerHTML = `<div class="card-custom p-3 pb-0 h-100" data-region="${el.denominazione_regione}">
-                  <p>${el.denominazione_regione}</p>
-                  <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
-             </div>
-            `;
-
-            cardWrapper.appendChild(div);
-
-            let bar = document.createElement('div');
-            bar.classList.add('col-12', 'mb-5');
-            bar.innerHTML = `
-            <p class="mb-0">${el.denominazione_regione}: ${
-              el.nuovi_positivi
-            }</p>
-            <div class="progress rounded-0">
-              <div class="progress-bar bg-main" style="width: ${
-                (100 * el.nuovi_positivi) / todayMax
-              }%"></div>
-            </div>
-            `;
-
-            progressWrapper.appendChild(bar);
-          });
-
-          // MODALS
-          let modal = document.querySelector('.modal-custom');
-          let modalContent = document.querySelector('.modal-custom-content');
-
-          document.querySelectorAll('[data-region]').forEach((el) => {
-            el.addEventListener('click', () => {
-              let region = el.dataset.region;
-
-              modal.classList.add('active');
-
-              let dataAboutRegion = lastUpdatedData.filter(
-                (el) => el.denominazione_regione == region
-              )[0]; /* Aggiungo [0] perché sono in un array di oggetti e mi serve il primo*/
-
-              modalContent.innerHTML = `
-                
-               <div class="container">
-                <div class="row">
-                  <div class="col-12">
-                    <p class="h2 text-main">${dataAboutRegion.denominazione_regione}</p>
-                    <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
-                    <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
-                    <p class="lead">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
-                    <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
-                  </div>
-                </div>
-              </div>
-              `;
-            });
-          });
-
-          // REMOVE MODALS
-          window.addEventListener('click', function (e) {
-            if (e.target === modal) {
-              modal.classList.remove('active');
-            }
-          });
-
-          //
-          let trendNew = document.querySelector('#trendNew');
-
-          let lombardia = sorted
-            .reverse()
-            .filter((el) => el.denominazione_regione == 'Lombardia')
-            .map((el) => [el.data, el.nuovi_positivi]);
-          console.log(lombardia);
-
-          let maxLombardia = Math.max(...lombardia.map((el) => el[1]));
-          console.log(maxLombardia);
-
-          lombardia.forEach((el) => {
-            let col = document.createElement('div');
-            col.classList.add('d-inline-block', 'bg-primary');
-            col.style.width = '10px';
-            col.style.marginRight = '1px';
-            col.style.height = `${(100 * el[1]) / maxLombardia}%`;
-
-            trendNew.appendChild(col);
-          });
-        });
-    </script>
   </body>
 </html>
