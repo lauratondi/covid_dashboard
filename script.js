@@ -4,6 +4,10 @@ fetch(
 )
   .then((response) => response.json())
   .then((dati) => {
+    // MODAL (spostata per renderla disponibile anche alle schede totali e non solo regioni)
+    let modal = document.querySelector('.modal-custom');
+    let modalContent = document.querySelector('.modal-custom-content');
+
     // Ordine dati dall'ultimo aggiornato
     let sorted = dati.reverse();
 
@@ -28,28 +32,54 @@ fetch(
     let totalCases = lastUpdatedData
       .map((el) => el.totale_casi)
       .reduce((t, n) => t + n);
-
     document.querySelector('#totalCases').innerHTML = totalCases;
+
+    document.querySelector('#timeTotal').addEventListener('click', () => {
+      let days = Array.from(new Set(sorted.map((el) => el.data))).reverse();
+      console.log(days);
+
+      modal.classList.add('active');
+      modalContent.innerHTML = `    
+         <div class="container">
+        
+          <div class="row scrollable">
+             <div class="col-12">
+               <p class="mb-0 mt-5 text-main"> Trend nuovi casi</p>
+               <div id="trendNew" class="d-flex align-items-end plot">
+               </div>
+             </div>
+             <div class="col-12">
+               <p class="mb-0 mt-5 text-main"> Trend decessi</p>
+               <div id="trendDeath" class="d-flex align-items-end plot">
+               </div>
+             </div>
+             <div class="col-12">
+               <p class="mb-0 mt-5 text-main"> Trend dimessi guariti</p>
+               <div id="trendRecovered" class="d-flex align-items-end plot">
+               </div>
+             </div>
+
+          </div>
+        </div>
+        `;
+    });
 
     // Guariti totali
     let totalRecovered = lastUpdatedData
       .map((el) => el.dimessi_guariti)
       .reduce((t, n) => t + n);
-
     document.querySelector('#totalRecovered').innerHTML = totalRecovered;
 
     // Morti totali
     let totalDeath = lastUpdatedData
       .map((el) => el.deceduti)
       .reduce((t, n) => t + n);
-
     document.querySelector('#totalDeath').innerHTML = totalDeath;
 
     // Totale Positivi attuali
     let totalPositive = lastUpdatedData
       .map((el) => el.totale_positivi)
       .reduce((t, n) => t + n);
-
     document.querySelector('#totalPositive').innerHTML = totalPositive;
 
     // CARD REGIONI & PROGRESS-BAR
@@ -85,9 +115,6 @@ fetch(
     });
 
     // MODALS
-    let modal = document.querySelector('.modal-custom');
-    let modalContent = document.querySelector('.modal-custom-content');
-
     document.querySelectorAll('[data-region]').forEach((el) => {
       el.addEventListener('click', () => {
         let region = el.dataset.region;
