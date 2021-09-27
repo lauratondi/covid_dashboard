@@ -36,32 +36,27 @@ fetch(
 
     document.querySelector('#timeTotal').addEventListener('click', () => {
       let days = Array.from(new Set(sorted.map((el) => el.data))).reverse();
-      console.log(days);
+
+      let totalsPerDays = days.map((el) => [
+        el,
+        sorted
+          .filter((i) => i.data == el)
+          .map((e) => e.nuovi_positivi)
+          .reduce((t, n) => t + n),
+      ]);
+      console.log(totalsPerDays);
 
       modal.classList.add('active');
       modalContent.innerHTML = `    
-         <div class="container">
-        
-          <div class="row scrollable">
-             <div class="col-12">
-               <p class="mb-0 mt-5 text-main"> Trend nuovi casi</p>
-               <div id="trendNew" class="d-flex align-items-end plot">
-               </div>
-             </div>
-             <div class="col-12">
-               <p class="mb-0 mt-5 text-main"> Trend decessi</p>
-               <div id="trendDeath" class="d-flex align-items-end plot">
-               </div>
-             </div>
-             <div class="col-12">
-               <p class="mb-0 mt-5 text-main"> Trend dimessi guariti</p>
-               <div id="trendRecovered" class="d-flex align-items-end plot">
-               </div>
-             </div>
-
-          </div>
+      <div class="container my-5 py-5">
+        <div class="row">
+          <div class="col-12">
+           <div id="totalTrend" class="d-flex align-items-end plot">
+           </div>
+         </div>
         </div>
-        `;
+      </div>
+      `;
     });
 
     // Guariti totali
@@ -93,9 +88,9 @@ fetch(
       let div = document.createElement('div');
       div.classList.add('col-12', 'col-md-6', 'my-4');
       div.innerHTML = `<div class="card-custom p-3 pb-0 h-100" data-region="${el.denominazione_regione}">
-            <p>${el.denominazione_regione}</p>
-            <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
-       </div>
+      <p>${el.denominazione_regione}</p>
+      <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
+      </div>
       `;
 
       cardWrapper.appendChild(div);
@@ -105,9 +100,9 @@ fetch(
       bar.innerHTML = `
       <p class="mb-0">${el.denominazione_regione}: ${el.nuovi_positivi}</p>
       <div class="progress rounded-0">
-        <div class="progress-bar bg-main" style="width: ${
-          (100 * el.nuovi_positivi) / todayMax
-        }%"></div>
+      <div class="progress-bar bg-main" style="width: ${
+        (100 * el.nuovi_positivi) / todayMax
+      }%"></div>
       </div>
       `;
 
@@ -127,39 +122,39 @@ fetch(
 
         modalContent.innerHTML = `
           
-         <div class="container">
+          <div class="container">
           <div class="row">
-            <div class="col-12">
-              <p class="h2 text-main">${dataAboutRegion.denominazione_regione}</p>
-            </div>
-            <div class="col-12">  
-              <p class="lead">Totale casi: ${dataAboutRegion.totale_casi}</p>
-              <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
-              <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
-              <p class="lead">Dimessi guariti: ${dataAboutRegion.dimessi_guariti}</p>
-              <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
-            </div>
+          <div class="col-12">
+          <p class="h2 text-main">${dataAboutRegion.denominazione_regione}</p>
+          </div>
+          <div class="col-12">  
+          <p class="lead">Totale casi: ${dataAboutRegion.totale_casi}</p>
+          <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
+          <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
+          <p class="lead">Dimessi guariti: ${dataAboutRegion.dimessi_guariti}</p>
+          <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
+          </div>
           </div>
           <div class="row scrollable">
-             <div class="col-12">
-               <p class="mb-0 mt-5 text-main"> Trend nuovi casi</p>
-               <div id="trendNew" class="d-flex align-items-end plot">
-               </div>
-             </div>
-             <div class="col-12">
-               <p class="mb-0 mt-5 text-main"> Trend decessi</p>
-               <div id="trendDeath" class="d-flex align-items-end plot">
-               </div>
-             </div>
-             <div class="col-12">
-               <p class="mb-0 mt-5 text-main"> Trend dimessi guariti</p>
-               <div id="trendRecovered" class="d-flex align-items-end plot">
-               </div>
-             </div>
-
+          <div class="col-12">
+          <p class="mb-0 mt-5 text-main"> Trend nuovi casi</p>
+          <div id="trendNew" class="d-flex align-items-end plot">
           </div>
-        </div>
-        `;
+          </div>
+          <div class="col-12">
+          <p class="mb-0 mt-5 text-main"> Trend decessi</p>
+          <div id="trendDeath" class="d-flex align-items-end plot">
+          </div>
+          </div>
+          <div class="col-12">
+          <p class="mb-0 mt-5 text-main"> Trend dimessi guariti</p>
+          <div id="trendRecovered" class="d-flex align-items-end plot">
+          </div>
+          </div>
+          
+          </div>
+          </div>
+          `;
 
         let trendData = sorted
           .map((el) => el)
@@ -171,7 +166,6 @@ fetch(
             el.deceduti,
             el.dimessi_guariti,
           ]);
-        console.log(trendData);
 
         let maxNew = Math.max(...trendData.map((el) => el[1]));
 
